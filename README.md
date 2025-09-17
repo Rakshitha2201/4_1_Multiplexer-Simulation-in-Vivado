@@ -80,7 +80,7 @@ end
 endmodule
 ```
 ## Simulated Output Gate Level Modelling
-
+<img width="1919" height="1079" alt="Screenshot 2025-08-25 170214" src="https://github.com/user-attachments/assets/293afa83-a50c-4abd-9060-459bdb0fce9e" />
 
 
 ---
@@ -131,7 +131,9 @@ endmodule
 
 ```
 ## Simulated Output Dataflow Modelling
-<img width="1919" height="1079" alt="Screenshot 2025-08-27 093417" src="https://github.com/user-attachments/assets/d3213b82-e24f-43cd-aed2-b0cc25a0b957" />
+<img width="1919" height="1079" alt="Screenshot 2025-08-27 093417" src="https://github.com/user-attachments/assets/51f01ac6-dabd-4745-81a4-ea3c25e6dd72" />
+
+
 
 
 
@@ -188,7 +190,8 @@ endmodule
 ```
 ## Simulated Output Behavioral Modelling
 
-<img width="1919" height="1079" alt="Screenshot 2025-08-22 120108" src="https://github.com/user-attachments/assets/f1c306cd-3338-44a7-b87d-5b235ee2e821" />
+<img width="1919" height="1079" alt="Screenshot 2025-08-22 120108" src="https://github.com/user-attachments/assets/ad266ac1-321c-4767-afe2-39e1779d70bf" />
+
 
 
 ### 4:1 MUX Structural Implementation
@@ -197,50 +200,50 @@ endmodule
 
 
 ```verilog
-module mux2_to_1 (
-    input wire A,
-    input wire B,
-    input wire S,
-    output wire Y
-);
-    assign Y = S ? B : A;
+`timescale 1ns / 1ps
+module mux41_4(a,b,s,z);
+input a,b,s;
+output z;
+wire w1,w2;
+and g1(w1,a,~s);
+and g2(w2,b,s);
+or g3(z,w1,w2);
 endmodule
 
-module mux4_to_1_structural (
-    input wire A,
-    input wire B,
-    input wire C,
-    input wire D,
-    input wire S0,
-    input wire S1,
-    output wire Y
-);
-
-
-
-
+module MUX41(i,s,y);
+input [3:0]i;
+input [1:0]s;
+output y;
+wire [2:1]w;
+MUX41_4 M1(w[1],i[0],i[1],s[1]);
+MUX41_4 M2(w[2],i[2],i[3]),s[1]);
+MUX41_4 M3(y,w[1],w[2],s[0]);
 endmodule
+
 ```
 ### Testbench Implementation
 ```verilog
 `timescale 1ns / 1ps
-
-module mux4_to_1_tb;
-    reg A, B, C, D, S0, S1;
-    wire Y_gate, Y_dataflow, Y_behavioral, Y_structural;
-
-    
-
-    initial begin
-        A = 0; B = 0; C = 0; D = 0; S0 = 0; S1 = 0;
-
-      
-        #10 $stop;
-    end
-
-   
-    end
+module MUX_41_tb;
+reg [3:0]i;
+reg [1:0]s;
+wire y;
+MUX41 uut(i,s,y);
+initial
+begin
+i=4'B1111;
+s=2'b00; #10
+$display("Selection is %b %b , output : %b ", s[1],s[0],y);
+s=2'b01; #10
+$display("Selection is %b %b , output : %b ", s[1],s[0],y);
+s=2'b10; #10
+$display("Selection is %b %b , output : %b ", s[1],s[0],y);
+s=2'b11; #10
+$display("Selection is %b %b , output : %b ", s[1],s[0],y);
+$finish;
+end
 endmodule
+
 ```
 ## Simulated Output Structural Modelling
 
